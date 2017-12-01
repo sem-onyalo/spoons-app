@@ -5,7 +5,8 @@ const url = require('url');
 const dbparams = url.parse(process.env.DATABASE_URL);
 const dbauth = dbparams.auth.split(':');
 
-const connPool = new pg.Pool({
+const connPool = new pg.Pool(
+{
     user: dbauth[0],
     password: dbauth[1],
     host: dbparams.hostname,
@@ -16,15 +17,34 @@ const connPool = new pg.Pool({
     idleTimeoutMillis: 30000
 });
   
-connPool.on('error', (err, client) => {
+connPool.on('error', (err, client) => 
+{
     console.error('idle client error', err.message, err.stack);
 });
 
-module.exports = {
-    ping: async () => {
-        try {
+module.exports = 
+{
+    ping: async () => 
+    {
+        try 
+        {
             return await connPool.query('select current_date');
-        } catch (ex) {
+        } 
+        catch (ex) 
+        {
+            console.error(ex);
+            return undefined;
+        }
+    },
+
+    query: async (text, params) => 
+    {
+        try 
+        {
+            return await connPool.query(text, params);
+        } 
+        catch (ex) 
+        {
             console.error(ex);
             return undefined;
         }

@@ -1,38 +1,48 @@
 create table usr (
     id serial primary key,
-    age integer not null,
-    name varchar(127) not null
-);
-
-create table label (
-    id serial primary key,
-    value varchar(63) not null
-);
-
-create table points (
-    id serial primary key,
-    user_id int references usr(id) on delete cascade,
-    value real not null
+    first_name varchar(127) not null,
+    last_name varchar(127) not null
 );
 
 create table question (
     id serial primary key,
-    value varchar(255) not null,
-    ordr smallint not null
+    text varchar(255) not null
+);
+
+create table question_series (
+    id uuid primary key,
+    user_id int references usr(id),
+    series_timestamp timestamp default current_timestamp not null
 );
 
 create table answer (
     id serial primary key,
-    create_timestamp timestamp default current_timestamp not null,
-    question_id int references question(id) on delete cascade,
-    user_id int references usr(id),
-    rating real not null
+    rating real not null,
+    text varchar(127) not null,
+    image_url varchar(255)
 );
 
-create table answer_label (
+create table answer_for_question (
     id serial primary key,
-    create_timestamp timestamp default current_timestamp not null,
+    question_id int references question(id) on delete cascade,
+    answer_id int references answer(id)
+);
+
+create table answer_next_question (
+    id serial primary key,
     answer_id int references answer(id) on delete cascade,
-    label_id int references label(id),
-    rating real not null
+    question_id int references question(id)
+);
+
+create table user_answer (
+    id serial primary key,
+    series_id uuid references question_series(id),
+    answer_id int references answer(id) on delete cascade,
+    answer_timestamp timestamp default current_timestamp not null
+);
+
+create table bootstrap (
+    id serial primary key,
+    user_id int references usr(id) unique,
+    question_id int references question(id) on delete cascade
 );

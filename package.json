@@ -1,7 +1,7 @@
 {
-  "name": "arthritis-hack",
+  "name": "spoons-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Spoons Web Application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,6 +17,7 @@
     "body-parser": "1.18.2",
     "cors": "2.8.4",
     "express": "4.16.2",
+    "path": "0.12.7",
     "pg": "7.3.0"
   }
 }
