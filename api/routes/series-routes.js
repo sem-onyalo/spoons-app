@@ -6,4 +6,7 @@ module.exports = (app) =>
     
     app.route('/api/start/:userId')
         .post(controller.startSeries);
+
+    app.route('/api/next/:seriesId/answers/:answerId')
+        .post(controller.resumeSeries);
 }
