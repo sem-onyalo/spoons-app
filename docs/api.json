@@ -1,0 +1,201 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "An API for interacting with the Spoons backend system.",
+    "version" : "1.0.0",
+    "title" : "Spoons API",
+    "contact" : {
+      "email" : "oonyalo@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/spoons/SpoonsAPI/1.0.0",
+  "tags" : [ {
+    "name" : "series",
+    "description" : "Operations to run a question series"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/start/{userId}" : {
+      "post" : {
+        "tags" : [ "series" ],
+        "summary" : "starts a question series",
+        "description" : "Pass in the user id to start the question series\nfor the specified user.\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "the id of the user to start the question series for",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "question series started successfully",
+            "schema" : {
+              "$ref" : "#/definitions/StartSeriesResponse"
+            }
+          },
+          "500" : {
+            "description" : "internal error occurred"
+          }
+        }
+      }
+    },
+    "/next/{seriesId}/answers/{answerId}" : {
+      "post" : {
+        "tags" : [ "series" ],
+        "summary" : "progresses to the next question in the series",
+        "description" : "Pass in the series id and and the answer id to get the\nnext question.\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "seriesId",
+          "in" : "path",
+          "description" : "the id of the required series",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid"
+        }, {
+          "name" : "answerId",
+          "in" : "path",
+          "description" : "the id of the answer to which the next question is linked",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "next question in series",
+            "schema" : {
+              "$ref" : "#/definitions/ResumeSeriesResponse"
+            }
+          },
+          "400" : {
+            "description" : "no more questions in series"
+          },
+          "500" : {
+            "description" : "internal error occurred"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Question" : {
+      "type" : "object",
+      "required" : [ "Id", "Text" ],
+      "properties" : {
+        "Id" : {
+          "type" : "integer",
+          "example" : 234
+        },
+        "Text" : {
+          "type" : "string",
+          "example" : "Do you have any pain today?"
+        }
+      },
+      "example" : {
+        "Text" : "Do you have any pain today?",
+        "Id" : 234
+      }
+    },
+    "Answer" : {
+      "type" : "object",
+      "required" : [ "Id", "Rating", "Text" ],
+      "properties" : {
+        "Id" : {
+          "type" : "integer",
+          "example" : 582
+        },
+        "Text" : {
+          "type" : "string",
+          "example" : "Yes"
+        },
+        "Rating" : {
+          "type" : "number",
+          "example" : 2.0
+        }
+      },
+      "example" : {
+        "Rating" : 2.0,
+        "Text" : "Yes",
+        "Id" : 582
+      }
+    },
+    "StartSeriesResponse" : {
+      "type" : "object",
+      "required" : [ "Answers", "Question", "SeriesId" ],
+      "properties" : {
+        "SeriesId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "Question" : {
+          "$ref" : "#/definitions/Question"
+        },
+        "Answers" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Answer"
+          }
+        }
+      },
+      "example" : {
+        "Answers" : [ {
+          "Rating" : 2.0,
+          "Text" : "Yes",
+          "Id" : 582
+        }, {
+          "Rating" : 2.0,
+          "Text" : "Yes",
+          "Id" : 582
+        } ],
+        "SeriesId" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+        "Question" : {
+          "Text" : "Do you have any pain today?",
+          "Id" : 234
+        }
+      }
+    },
+    "ResumeSeriesResponse" : {
+      "type" : "object",
+      "required" : [ "Answers", "Question", "SeriesId" ],
+      "properties" : {
+        "SeriesId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "Question" : {
+          "$ref" : "#/definitions/Question"
+        },
+        "Answers" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Answer"
+          }
+        }
+      },
+      "example" : {
+        "Answers" : [ {
+          "Rating" : 2.0,
+          "Text" : "Yes",
+          "Id" : 582
+        }, {
+          "Rating" : 2.0,
+          "Text" : "Yes",
+          "Id" : 582
+        } ],
+        "SeriesId" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+        "Question" : {
+          "Text" : "Do you have any pain today?",
+          "Id" : 234
+        }
+      }
+    }
+  }
+}
